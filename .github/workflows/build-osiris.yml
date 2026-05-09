@@ -1,0 +1,27 @@
+name: Build Osiris-Strike ISO
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 240
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y debootstrap squashfs-tools xorriso grub-pc-bin grub-efi-amd64-signed shim-signed mtools
+
+      - name: Build Osiris-Strike
+        run: sudo ./scripts/build-osiris.sh
+
+      - name: Upload ISO
+        uses: actions/upload-artifact@v4
+        with:
+          name: Osiris-Strike-ISO
+          path: osiris.iso
+          retention-days: 14
