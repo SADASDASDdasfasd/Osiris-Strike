@@ -6,15 +6,18 @@ on:
 jobs:
   build:
     runs-on: ubuntu-24.04
-    timeout-minutes: 240
+    timeout-minutes: 300
 
     steps:
       - uses: actions/checkout@v4
 
+      - name: Make script executable
+        run: chmod +x scripts/build-osiris.sh
+
       - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt install -y debootstrap squashfs-tools xorriso grub-pc-bin grub-efi-amd64-signed shim-signed mtools
+          sudo apt install -y debootstrap squashfs-tools xorriso grub-pc-bin grub-efi-amd64-signed shim-signed mtools curl git
 
       - name: Build Osiris-Strike
         run: sudo ./scripts/build-osiris.sh
@@ -24,4 +27,4 @@ jobs:
         with:
           name: Osiris-Strike-ISO
           path: osiris.iso
-          retention-days: 14
+          retention-days: 7
